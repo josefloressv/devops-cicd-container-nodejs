@@ -2,13 +2,25 @@ const express = require("express");
 const app = express();
 
 app.get("/", (req, res) => {  
+  res.status(200).send("OK");
+});
+
+app.get("/app01", (req, res) => {  
   console.log(getTimestampLog() + " procesando peticion...");
   res.send("Hola Comunidad!");
 });
 
-app.get("/health", (req, res) => {
-  res.status(200);
+app.get("/app01/cncf", (req, res) => {  
+  res.send("Hola Comunidad CNCF!");
+});
+
+app.get("/app01/health", (req, res) => {
   res.send("UP");
+});
+
+app.get("/app01/dashboard", (req, res) => {  
+  console.log(getTimestampLog() + " trying to access dashboard without login...");
+  res.status(401).send("Unauthorized");
 });
 
 app.listen(3000, () => {
