@@ -3,7 +3,7 @@ pipeline{
 
     environment {
         CODE_REPO = 'https://github.com/josefloressv/devops-cicd-container-nodejs.git'
-        ECR_REPO = '838127195462.dkr.ecr.us-east-1.amazonaws.com/app01-nodejs'
+        ECR_REPO_NAME = 'app01-nodejs'
     }
     parameters{
         string(
@@ -45,21 +45,21 @@ pipeline{
         stage("Build Docker image") {
             steps{
                 script {
-                    sh "docker build -t ${env.ECR_REPO}:latest ."
+                    sh "docker build -t ${GLOBAL_AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/${env.ECR_REPO_NAME}:latest ."
                 }
             }
         }
         stage("Docker Login") {
             steps{
                 script {
-                    sh 'docker login --username AWS --password \$(aws ecr get-login-password --region us-east-1) 838127195462.dkr.ecr.us-east-1.amazonaws.com'
+                    sh 'docker login --username AWS --password \$(aws ecr get-login-password --region us-east-1) ${GLOBAL_AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com'
                 }
             }
         }
         stage("Push Docker image") {
             steps{
                 script {
-                    sh "docker push ${env.ECR_REPO}:latest"
+                    sh "docker push ${GLOBAL_AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/${env.ECR_REPO_NAME}:latest"
                 }
             }
         }
